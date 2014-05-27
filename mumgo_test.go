@@ -1,8 +1,8 @@
 package mumgo
 
 import (
-  "testing"
-  "reflect"
+	"reflect"
+	"testing"
 )
 
 func expect(t *testing.T, a interface{}, b interface{}) {
