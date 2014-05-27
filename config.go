@@ -7,14 +7,11 @@ type Config struct {
 	port     int
 }
 
-// Zero config
 var zeroCnf = Config{}
-
-// Default config
 var defaultCnf = Config{
 	username: "mumgo", host: "localhost", port: 64738}
 
-// Fix the zero values in the provided config
+// Fix any zero values & return a new Config.
 func (c Config) FixNils() Config {
 	if c.username == zeroCnf.username {
 		c.username = defaultCnf.username
