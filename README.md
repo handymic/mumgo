@@ -22,12 +22,12 @@ Example usage:
       bot := mumgo.Connect(config)
 
       // Upon receiving text message
-      bot.OnText(func(text mumble.Text){
+      bot.OnText(func(text mumgo.Text){
         // ...
       })
 
       // Upon receiving audio message
-      bot.OnAudio(func(audio mumble.Audio){
+      bot.OnAudio(func(audio mumgo.Audio){
         // ...
       })
 
