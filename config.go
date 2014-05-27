@@ -12,7 +12,7 @@ var defaultCnf = Config{
 	username: "mumgo", host: "localhost", port: 64738}
 
 // Fix any zero values & return a new Config.
-func (c Config) FixNils() Config {
+func (c Config) ToValid() Config {
 	if c.username == zeroCnf.username {
 		c.username = defaultCnf.username
 	}
