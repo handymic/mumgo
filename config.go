@@ -1,9 +1,5 @@
 package mumgo
 
-// Zero values for comparison
-var stringZero string
-var intZero int
-
 type Config struct {
 	username string
 	password string
@@ -11,19 +7,26 @@ type Config struct {
 	port     int
 }
 
+// Zero config
+var zeroCnf = Config{}
+
+// Default config
+var defaultCnf = Config{
+	username: "mumgo", host: "localhost", port: 64738}
+
 // Fix the zero values in the provided config
-func (c *Config) FixNil(config Config) Config {
-	if config.username == stringZero {
-		config.username = "mumgo"
+func (c Config) FixNils() Config {
+	if c.username == zeroCnf.username {
+		c.username = defaultCnf.username
 	}
 
-	if config.host == stringZero {
-		config.host = "localhost"
+	if c.host == zeroCnf.host {
+		c.host = defaultCnf.host
 	}
 
-	if config.port == intZero {
-		config.port = 64738
+	if c.port == zeroCnf.port {
+		c.port = defaultCnf.port
 	}
 
-	return config
+	return c
 }
