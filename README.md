@@ -13,10 +13,10 @@ Example usage:
 
     import "github.com/handymic/mumgo"
 
-    func main() {
+    // Configure
+    config := mumgo.Config(...)
 
-      // Configure
-      config = mumgo.Config(...)
+    func main() {
 
       // Initializes a bot
       bot := mumgo.Connect(config)
