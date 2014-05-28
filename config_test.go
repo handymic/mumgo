@@ -56,6 +56,42 @@ func TestNoChangeValidUsername(t *testing.T) {
 	refute(t, defaultCnf.username, orig.username)
 }
 
+// Should fix missing *certFile*
+func TestFixNilCertFile(t *testing.T) {
+	orig := Config{}
+	fixed := orig.ToValid()
+
+	expect(t, defaultCnf.certFile, fixed.certFile)
+	refute(t, defaultCnf.certFile, orig.certFile)
+}
+
+// Shouldnt change existing *certFile*
+func TestNoChangeValidCertFile(t *testing.T) {
+	orig := Config{certFile: "~/.mumgo/mumgo.crt"}
+	fixed := orig.ToValid()
+
+	refute(t, defaultCnf.certFile, fixed.certFile)
+	refute(t, defaultCnf.certFile, orig.certFile)
+}
+
+// Should fix missing *keyFile*
+func TestFixNilKeyFile(t *testing.T) {
+	orig := Config{}
+	fixed := orig.ToValid()
+
+	expect(t, defaultCnf.keyFile, fixed.keyFile)
+	refute(t, defaultCnf.keyFile, orig.keyFile)
+}
+
+// Shouldnt change existing *keyFile*
+func TestNoChangeValidKeyFile(t *testing.T) {
+	orig := Config{keyFile: "~/.mumgo/mumgo.crt"}
+	fixed := orig.ToValid()
+
+	refute(t, defaultCnf.keyFile, fixed.keyFile)
+	refute(t, defaultCnf.keyFile, orig.keyFile)
+}
+
 // Shouldnt fix missing *password*
 func TestNoFixNilPassword(t *testing.T) {
 	orig := Config{}
