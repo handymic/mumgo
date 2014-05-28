@@ -1,6 +1,12 @@
 package mumgo
 
-import "testing"
+import (
+	"fmt"
+	"math/rand"
+	"os"
+	"strings"
+	"testing"
+)
 
 // Should fix missing *host*
 func TestFixNilHost(t *testing.T) {
@@ -99,4 +105,44 @@ func TestNoFixNilPassword(t *testing.T) {
 
 	expect(t, zeroCnf.password, fixed.password)
 	expect(t, zeroCnf.password, orig.password)
+}
+
+// Should succeed in loading valid cert
+func TestLoadCertWithValidCertAndKeyFiles(t *testing.T) {
+	certFile, keyFile := os.Getenv("TEST_CRT"), os.Getenv("TEST_KEY")
+
+	config := Config{keyFile: keyFile, certFile: certFile}
+	cert, err := config.LoadCert()
+
+	expect(t, 1, len(cert.Certificate))
+	expect(t, nil, err)
+}
+
+// Should fail in loading missing cert
+func TestLoadCertWithMissingCertAndKeyFiles(t *testing.T) {
+	certFile, keyFile := "/tmp/missing.crt", "/tmp/missing.key"
+
+	config := Config{keyFile: keyFile, certFile: certFile}
+	cert, err := config.LoadCert()
+
+	expect(t, 0, len(cert.Certificate))
+	refute(t, nil, err)
+}
+
+// Should fail in loading invalid cert
+func TestLoadCertWithInvalidCertAndKeyFiles(t *testing.T) {
+	certFile := fmt.Sprint("/tmp/invalid.%i.crt", rand.Intn(1000))
+	keyFile := strings.Replace(certFile, ".crt", ".key", 1)
+
+	os.Create(certFile)
+	os.Create(keyFile)
+
+	config := Config{keyFile: keyFile, certFile: certFile}
+	cert, err := config.LoadCert()
+
+	expect(t, 0, len(cert.Certificate))
+	refute(t, nil, err)
+
+	os.Remove(certFile)
+	os.Remove(keyFile)
 }

@@ -1,5 +1,9 @@
 package mumgo
 
+import (
+	"crypto/tls"
+)
+
 type Config struct {
 	username string
 	password string
@@ -18,6 +22,7 @@ var defaultCnf = Config{
 
 // Fix any zero values & return a new Config.
 func (c Config) ToValid() Config {
+
 	if c.username == zeroCnf.username {
 		c.username = defaultCnf.username
 	}
@@ -39,4 +44,9 @@ func (c Config) ToValid() Config {
 	}
 
 	return c
+}
+
+// Loads the tls certificate specified by *certFile* & *keyFile*
+func (c *Config) LoadCert() (tls.Certificate, error) {
+	return tls.LoadX509KeyPair(c.certFile, c.keyFile)
 }
