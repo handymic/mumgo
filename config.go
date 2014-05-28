@@ -1,10 +1,5 @@
 package mumgo
 
-import (
-	"os"
-	"path/filepath"
-)
-
 type Config struct {
 	username string
 	password string
@@ -14,8 +9,7 @@ type Config struct {
 	keyFile  string
 }
 
-var pwd, err = filepath.Abs(filepath.Dir(os.Args[0]))
-var certDir = pwd + "/certs"
+var certDir = pwd() + "/certs"
 var zeroCnf = Config{}
 var defaultCnf = Config{
 	username: "mumgo", host: "localhost", port: 64738,
