@@ -21,7 +21,7 @@ func NewConn(config Config) (Conn, error) {
 	addr := fmt.Sprint(config.host, ":", config.port)
 	tlsConf := &tls.Config{
 		Certificates:       []tls.Certificate{cert},
-		InsecureSkipVerify: true}
+		InsecureSkipVerify: true} // TODO: fix hardcoding
 
 	conn, err := tls.Dial("tcp", addr, tlsConf)
 
