@@ -137,12 +137,14 @@ func TestLoadCertWithInvalidCertAndKeyFiles(t *testing.T) {
 	os.Create(certFile)
 	os.Create(keyFile)
 
+  defer func() { // trash created tmp files prior eventual return
+    os.Remove(certFile)
+    os.Remove(keyFile)
+  }()
+
 	config := Config{keyFile: keyFile, certFile: certFile}
 	cert, err := config.LoadCert()
 
 	expect(t, 0, len(cert.Certificate))
 	refute(t, nil, err)
-
-	os.Remove(certFile)
-	os.Remove(keyFile)
 }
