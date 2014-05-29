@@ -1,10 +1,7 @@
 package mumgo
 
 import (
-	"fmt"
-	"math/rand"
 	"os"
-	"strings"
 	"testing"
 )
 
@@ -131,16 +128,16 @@ func TestLoadCertWithMissingCertAndKeyFiles(t *testing.T) {
 
 // Should fail in loading invalid cert
 func TestLoadCertWithInvalidCertAndKeyFiles(t *testing.T) {
-	certFile := fmt.Sprint("/tmp/invalid.%i.crt", rand.Intn(1000))
-	keyFile := strings.Replace(certFile, ".crt", ".key", 1)
+	certFile := os.TempDir() + "/invalid.crt"
+	keyFile := os.TempDir() + "/invalid.key"
 
 	os.Create(certFile)
 	os.Create(keyFile)
 
-  defer func() { // trash created tmp files prior eventual return
-    os.Remove(certFile)
-    os.Remove(keyFile)
-  }()
+	defer func() { // trash created tmp files prior eventual return
+		os.Remove(certFile)
+		os.Remove(keyFile)
+	}()
 
 	config := Config{keyFile: keyFile, certFile: certFile}
 	cert, err := config.LoadCert()

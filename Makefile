@@ -1,4 +1,5 @@
 export GOPATH = $(shell pwd)
+export TMPDIR = $(shell pwd)/tmp/mumgo
 export TEST_CRT = $(GOPATH)/tmp/certs/mumgo.crt
 export TEST_KEY = $(subst .crt,.key,$(TEST_CRT))
 
@@ -9,7 +10,7 @@ fmt:
 	for f in `ls *.go`; do \
 		gofmt -tabwidth=2 -w $$f; done
 
-test: $(TEST_CRT)
+test: $(TMPDIR) $(TEST_CRT)
 	go test
 
 $(TEST_CRT):
@@ -18,3 +19,5 @@ $(TEST_CRT):
 		openssl req -x509 -newkey rsa:2048 -nodes -days 1001 \
 			-keyout $(TEST_KEY) -out $@
 
+$(TMPDIR):
+	mkdir -p $@
