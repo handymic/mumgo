@@ -6,7 +6,8 @@ import (
 )
 
 type Conn struct {
-	conn *tls.Conn
+	conn        *tls.Conn
+	initialized bool
 }
 
 // Creates a new initialized connection
@@ -28,7 +29,12 @@ func NewConn(config Config) (Conn, error) {
 		return Conn{}, err
 	}
 
-	return Conn{conn: conn}, nil
+	return Conn{conn: conn, initialized: true}, nil
 }
 
-//
+// Close the connection
+func (c *Conn) Close() {
+	if c.initialized {
+		c.conn.Close()
+	}
+}

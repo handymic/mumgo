@@ -15,8 +15,13 @@ func newConfig() Config {
 	return config.ToValid()
 }
 
+func closeConn(conn *Conn) {
+	conn.Close()
+}
+
 func TestNewConnWithAllValid(t *testing.T) {
-	_, err := NewConn(newConfig())
+	conn, err := NewConn(newConfig())
+	defer closeConn(&conn)
 
 	expect(t, nil, err)
 }
@@ -24,7 +29,9 @@ func TestNewConnWithAllValid(t *testing.T) {
 func TestNewConnWithInvalidAddr(t *testing.T) {
 	config := newConfig()
 	config.host = "missinghost"
-	_, err := NewConn(config)
+
+	conn, err := NewConn(config)
+	defer closeConn(&conn)
 
 	refute(t, nil, err)
 }
@@ -32,7 +39,9 @@ func TestNewConnWithInvalidAddr(t *testing.T) {
 func TestNewConnWithInvalidCert(t *testing.T) {
 	config := newConfig()
 	config.certFile = "/tmp/missing.crt"
-	_, err := NewConn(config)
+
+	conn, err := NewConn(config)
+	defer closeConn(&conn)
 
 	refute(t, nil, err)
 }
@@ -40,7 +49,9 @@ func TestNewConnWithInvalidCert(t *testing.T) {
 func TestNewConnWithInvalidKey(t *testing.T) {
 	config := newConfig()
 	config.keyFile = "/tmp/missing.key"
-	_, err := NewConn(config)
+
+	conn, err := NewConn(config)
+	defer closeConn(&conn)
 
 	refute(t, nil, err)
 }
