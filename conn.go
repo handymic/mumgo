@@ -91,25 +91,21 @@ func (c *Conn) Write(message proto.Message) (int, error) {
 	mtype := messageTypes[reflect.TypeOf(message)]
 	chunk = make([]byte, 2)
 	binary.PutVarint(chunk, int64(mtype))
-	_, err = buffer.Write(chunk)
 
-	if err != nil {
+	if _, err = buffer.Write(chunk); err != nil {
 		return -1, err
 	}
 
 	// Prepare *size* prefix
 	chunk = make([]byte, 4)
 	binary.PutVarint(chunk, int64(len(payload)))
-	_, err = buffer.Write(chunk)
 
-	if err != nil {
+	if _, err = buffer.Write(chunk); err != nil {
 		return -1, err
 	}
 
 	// Prepare *payload* body
-	_, err = buffer.Write(payload)
-
-	if err != nil {
+	if _, err = buffer.Write(payload); err != nil {
 		return -1, err
 	}
 
