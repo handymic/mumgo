@@ -10,8 +10,11 @@ fmt:
 	for f in `ls *.go`; do \
 		gofmt -tabwidth=2 -w $$f; done
 
-test: $(TMPDIR) $(TEST_CRT)
+test: $(TMPDIR) $(TEST_CRT) setup
 	go test
+
+setup:
+	go get -d .
 
 $(TEST_CRT):
 	# Generating test cert required for tests ...
