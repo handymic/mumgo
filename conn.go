@@ -43,11 +43,11 @@ var messageTypes = map[reflect.Type]int{
 
 //
 type Conn struct {
-	conn        *tls.Conn
-	initialized bool
+	conn      *tls.Conn
+	connected bool
 }
 
-// Creates a new initialized connection
+// Creates a new connected connection
 func NewConn(config Config) (Conn, error) {
 	cert, err := config.LoadCert()
 
@@ -77,12 +77,12 @@ func NewConn(config Config) (Conn, error) {
 
 // Close the connection
 func (c *Conn) Close() error {
-	if c.initialized {
+	if c.connected {
 		if err := c.conn.Close(); err != nil {
 			return err
 		}
 
-		c.initialized = false
+		c.connected = false
 	}
 
 	return nil
@@ -133,7 +133,7 @@ func (c *Conn) init(config Config) error {
 		return err
 	}
 
-	c.initialized = true
+	c.connected = true
 	return nil
 }
 
