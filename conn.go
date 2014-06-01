@@ -78,7 +78,11 @@ func NewConn(config Config) (Conn, error) {
 // Close the connection
 func (c *Conn) Close() error {
 	if c.initialized {
-    return c.conn.Close();
+		if err := c.conn.Close(); err != nil {
+			return err
+		}
+
+		c.initialized = false
 	}
 
 	return nil
