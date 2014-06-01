@@ -60,13 +60,19 @@ func NewConn(config Config) (Conn, error) {
 		Certificates:       []tls.Certificate{cert},
 		InsecureSkipVerify: true} // TODO: fix hardcoding
 
-	conn, err := tls.Dial("tcp", addr, tlsConf)
-
+	// Inits tls connection
+	tlsConn, err := tls.Dial("tcp", addr, tlsConf)
 	if err != nil {
 		return Conn{}, err
 	}
 
-	return Conn{conn: conn, initialized: true}, nil
+	// Inits client connection
+	conn := Conn{conn: tlsConn}
+	if err := conn.init(config); err != nil {
+		return Conn{}, err
+	}
+
+	return conn, nil
 }
 
 // Close the connection
@@ -110,4 +116,48 @@ func (c *Conn) Write(message proto.Message) (int, error) {
 	}
 
 	return c.conn.Write(buffer.Bytes())
+}
+
+// Initializes the connection
+func (c *Conn) init(config Config) error {
+	if err := c.exchangeVersion(); err != nil {
+		return err
+	}
+	if err := c.authenticate(config); err != nil {
+		return err
+	}
+
+	c.initialized = true
+	return nil
+}
+
+// Exchanges version info
+func (c *Conn) exchangeVersion() error {
+	major, minor, patch := 1, 2, 5
+
+	version := uint32((major << 16) | (minor << 8) | (patch & 0xFF))
+
+	// TODO: fix hardcoding !!!
+	release := "mumgo 0.0.1"
+	os, osVersion := "linux", "#1 SMP PREEMPT Tue May 13 16:41:39 CEST 2014"
+
+	_, err := c.Write(&mumble.Version{
+		Version:   &version,
+		Release:   &release,
+		Os:        &os,
+		OsVersion: &osVersion})
+
+	return err
+}
+
+// Performs authentication
+func (c *Conn) authenticate(config Config) error {
+	opus := true
+
+	_, err := c.Write(&mumble.Authenticate{
+		Username: &config.username,
+		Password: &config.password,
+		Opus:     &opus})
+
+	return err
 }
