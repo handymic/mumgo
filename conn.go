@@ -76,10 +76,12 @@ func NewConn(config Config) (Conn, error) {
 }
 
 // Close the connection
-func (c *Conn) Close() {
+func (c *Conn) Close() error {
 	if c.initialized {
-		c.conn.Close()
+    return c.conn.Close();
 	}
+
+	return nil
 }
 
 // Write protobuf message to connection, taking care of header construction
