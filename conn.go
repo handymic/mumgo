@@ -13,7 +13,7 @@ import (
 
 // Message to type mappings to ease building the appropriate
 // protobuf message on the fly
-var messageTypes = map[reflect.Type]int{
+var messageTypes = map[reflect.Type]uint16{
 	reflect.TypeOf(&mumble.Version{}):             0,
 	reflect.TypeOf(&mumble.UDPTunnel{}):           1,
 	reflect.TypeOf(&mumble.Authenticate{}):        2,
@@ -96,32 +96,33 @@ func (c *Conn) Write(message proto.Message) (int, error) {
 		return -1, err
 	}
 
-	var buffer bytes.Buffer
-	var chunk []byte
+	var buf bytes.Buffer
+	var bs []byte
 
 	// Prepare *type* prefix
 	mtype := messageTypes[reflect.TypeOf(message)]
-	chunk = make([]byte, 2)
-	binary.PutVarint(chunk, int64(mtype))
+	bs = make([]byte, 2)
+	binary.LittleEndian.PutUint16(bs, mtype)
 
-	if _, err = buffer.Write(chunk); err != nil {
+	if _, err := buf.Write(bs); err != nil {
 		return -1, err
 	}
 
 	// Prepare *size* prefix
-	chunk = make([]byte, 4)
-	binary.PutVarint(chunk, int64(len(payload)))
+	size := uint32(len(payload))
+	bs = make([]byte, 4)
+	binary.LittleEndian.PutUint32(bs, size)
 
-	if _, err = buffer.Write(chunk); err != nil {
+	if _, err := buf.Write(bs); err != nil {
 		return -1, err
 	}
 
 	// Prepare *payload* body
-	if _, err = buffer.Write(payload); err != nil {
+	if _, err := buf.Write(payload); err != nil {
 		return -1, err
 	}
 
-	return c.conn.Write(buffer.Bytes())
+	return c.conn.Write(buf.Bytes())
 }
 
 // Initializes the connection
