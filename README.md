@@ -2,7 +2,7 @@
 
 GO package to build mumble client bot.
 
-NOTE: this is still very much work in progress ... use it at ur own risk.
+NOTE: this is still very much work in progress, & isnt usable yet.
 
 
 ## Usage
