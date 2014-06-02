@@ -14,14 +14,13 @@ type Config struct {
 	KeyFile  string
 }
 
-var certDir = pwd() + "/certs"
 var zeroCnf = Config{}
 var defaultCnf = Config{
 	Username: "mumgo",
 	Host:     "localhost",
 	Port:     64738,
-	CertFile: certDir + "/mumgo.crt",
-	KeyFile:  certDir + "/mumgo.key"}
+	CertFile: "~/.mumgo/mumgo.crt",
+	KeyFile:  "~/.mumgo/mumgo.key"}
 
 // Creates a new Config with unassigned fields initialized to defaults
 func NewConfig(base ...Config) Config {

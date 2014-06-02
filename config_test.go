@@ -53,7 +53,7 @@ func TestNewConfig_FixNilCertFile(t *testing.T) {
 
 // Shouldnt change existing *certFile*
 func TestNewConfig_NoChangeValidCertFile(t *testing.T) {
-	valid := "~/.mumgo/mumgo.crt"
+	valid := "~/.mumgo/mumbot.crt"
 	config := NewConfig(Config{CertFile: valid})
 	expect(t, valid, config.CertFile)
 }
@@ -66,7 +66,7 @@ func TestNewConfig_FixNilKeyFile(t *testing.T) {
 
 // Shouldnt change existing *keyFile*
 func TestNewConfig_NoChangeValidKeyFile(t *testing.T) {
-	valid := "~/.mumgo/mumgo.crt"
+	valid := "~/.mumgo/mumbot.crt"
 	config := NewConfig(Config{KeyFile: valid})
 	expect(t, valid, config.KeyFile)
 }
