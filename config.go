@@ -17,7 +17,9 @@ type Config struct {
 var certDir = pwd() + "/certs"
 var zeroCnf = Config{}
 var defaultCnf = Config{
-	Username: "mumgo", Host: "localhost", Port: 64738,
+	Username: "mumgo",
+	Host:     "localhost",
+	Port:     64738,
 	CertFile: certDir + "/mumgo.crt",
 	KeyFile:  certDir + "/mumgo.key"}
 
