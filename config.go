@@ -14,8 +14,7 @@ type Config struct {
 	KeyFile  string
 }
 
-var zeroCnf = Config{}
-var defaultCnf = Config{
+var zeroCnf, defaultCnf = Config{}, Config{
 	Username: "mumgo",
 	Host:     "localhost",
 	Port:     64738,
