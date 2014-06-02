@@ -48,19 +48,16 @@ type Conn struct {
 
 // Creates a new connected connection
 func NewConn(config Config) (Conn, error) {
-	cert, err := config.LoadCert()
 
+  // Gets tls.Config described by config.certFile & config.keyFile
+	tlsConf, err := config.GetTLSConfig(false)
 	if err != nil {
 		return Conn{}, err
 	}
 
-	addr := fmt.Sprint(config.host, ":", config.port)
-	tlsConf := &tls.Config{
-		Certificates:       []tls.Certificate{cert},
-		InsecureSkipVerify: true} // TODO: fix hardcoding
-
 	// Inits tls connection
-	tlsConn, err := tls.Dial("tcp", addr, tlsConf)
+	addr := fmt.Sprint(config.host, ":", config.port)
+	tlsConn, err := tls.Dial("tcp", addr, &tlsConf)
 	if err != nil {
 		return Conn{}, err
 	}

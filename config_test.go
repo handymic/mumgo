@@ -105,29 +105,29 @@ func TestNoFixNilPassword(t *testing.T) {
 }
 
 // Should succeed in loading valid cert
-func TestLoadCertWithValidCertAndKeyFiles(t *testing.T) {
+func TestGetTLSConfigWithValidCertAndKeyFiles(t *testing.T) {
 	certFile, keyFile := os.Getenv("TEST_CRT"), os.Getenv("TEST_KEY")
 
 	config := Config{keyFile: keyFile, certFile: certFile}
-	cert, err := config.LoadCert()
+	tlsConf, err := config.GetTLSConfig(true)
 
-	expect(t, 1, len(cert.Certificate))
+	expect(t, 1, len(tlsConf.Certificates))
 	expect(t, nil, err)
 }
 
 // Should fail in loading missing cert
-func TestLoadCertWithMissingCertAndKeyFiles(t *testing.T) {
+func TestGetTLSConfigWithMissingCertAndKeyFiles(t *testing.T) {
 	certFile, keyFile := "/tmp/missing.crt", "/tmp/missing.key"
 
 	config := Config{keyFile: keyFile, certFile: certFile}
-	cert, err := config.LoadCert()
+	tlsConf, err := config.GetTLSConfig(true)
 
-	expect(t, 0, len(cert.Certificate))
+	expect(t, 0, len(tlsConf.Certificates))
 	refute(t, nil, err)
 }
 
 // Should fail in loading invalid cert
-func TestLoadCertWithInvalidCertAndKeyFiles(t *testing.T) {
+func TestGetTLSConfigWithInvalidCertAndKeyFiles(t *testing.T) {
 	certFile := os.TempDir() + "/invalid.crt"
 	keyFile := os.TempDir() + "/invalid.key"
 
@@ -140,8 +140,8 @@ func TestLoadCertWithInvalidCertAndKeyFiles(t *testing.T) {
 	}()
 
 	config := Config{keyFile: keyFile, certFile: certFile}
-	cert, err := config.LoadCert()
+	tlsConf, err := config.GetTLSConfig(true)
 
-	expect(t, 0, len(cert.Certificate))
+	expect(t, 0, len(tlsConf.Certificates))
 	refute(t, nil, err)
 }

@@ -1,6 +1,9 @@
 package mumgo
 
 import (
+	"fmt"
+	mumble "github.com/handymic/MumbleProto-go"
+
 	"os"
 	"testing"
 )
@@ -54,4 +57,18 @@ func TestNewConnWithInvalidKey(t *testing.T) {
 	defer closeConn(&conn)
 
 	refute(t, nil, err)
+}
+
+func TestWrite(t *testing.T) {
+	config := newConfig()
+
+	conn, err := NewConn(config)
+	defer closeConn(&conn)
+
+	message := "OMG"
+	size, err := conn.Write(&mumble.TextMessage{
+		Message: &message})
+
+	fmt.Println("WRITE:", size, err)
+
 }

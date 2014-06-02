@@ -46,7 +46,17 @@ func (c Config) ToValid() Config {
 	return c
 }
 
-// Loads the tls certificate specified by *certFile* & *keyFile*
-func (c *Config) LoadCert() (tls.Certificate, error) {
-	return tls.LoadX509KeyPair(c.certFile, c.keyFile)
+// Get the tls.Config describing *certFile* & *keyFile*
+func (c *Config) GetTLSConfig(verify bool) (tls.Config, error) {
+	cert, err := tls.LoadX509KeyPair(c.certFile, c.keyFile)
+
+	if err != nil {
+		return tls.Config{}, err
+	}
+
+	config := tls.Config{
+		Certificates:       []tls.Certificate{cert},
+		InsecureSkipVerify: !verify}
+
+	return config, nil
 }
