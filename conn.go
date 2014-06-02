@@ -6,7 +6,6 @@ import (
 
 	"bytes"
 	"crypto/tls"
-	"encoding/binary"
 	"fmt"
 	"reflect"
 )
@@ -97,23 +96,16 @@ func (c *Conn) Write(message proto.Message) (int, error) {
 	}
 
 	var buf bytes.Buffer
-	var bs []byte
 
 	// Prepare *type* prefix
 	mtype := messageTypes[reflect.TypeOf(message)]
-	bs = make([]byte, 2)
-	binary.LittleEndian.PutUint16(bs, mtype)
-
-	if _, err := buf.Write(bs); err != nil {
+	if _, err := buf.Write(uint16tbs(mtype)); err != nil {
 		return -1, err
 	}
 
 	// Prepare *size* prefix
 	size := uint32(len(payload))
-	bs = make([]byte, 4)
-	binary.LittleEndian.PutUint32(bs, size)
-
-	if _, err := buf.Write(bs); err != nil {
+	if _, err := buf.Write(uint32tbs(size)); err != nil {
 		return -1, err
 	}
 
