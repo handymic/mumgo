@@ -10,17 +10,17 @@ func TestFixNilHost(t *testing.T) {
 	orig := Config{}
 	fixed := orig.ToValid()
 
-	expect(t, defaultCnf.host, fixed.host)
-	refute(t, defaultCnf.host, orig.host)
+	expect(t, defaultCnf.Host, fixed.Host)
+	refute(t, defaultCnf.Host, orig.Host)
 }
 
 // Shouldnt change existing *host*
 func TestNoChangeValidHost(t *testing.T) {
-	orig := Config{host: "192.168.0.254"}
+	orig := Config{Host: "192.168.0.254"}
 	fixed := orig.ToValid()
 
-	refute(t, defaultCnf.host, fixed.host)
-	refute(t, defaultCnf.host, orig.host)
+	refute(t, defaultCnf.Host, fixed.Host)
+	refute(t, defaultCnf.Host, orig.Host)
 }
 
 // Should fix missing *port*
@@ -28,35 +28,35 @@ func TestFixNilPort(t *testing.T) {
 	orig := Config{}
 	fixed := orig.ToValid()
 
-	expect(t, defaultCnf.port, fixed.port)
-	refute(t, defaultCnf.port, orig.port)
+	expect(t, defaultCnf.Port, fixed.Port)
+	refute(t, defaultCnf.Port, orig.Port)
 }
 
 // Shouldnt change existing *port*
 func TestNoChangeValidPort(t *testing.T) {
-	orig := Config{port: 56789}
+	orig := Config{Port: 56789}
 	fixed := orig.ToValid()
 
-	refute(t, defaultCnf.port, fixed.port)
-	refute(t, defaultCnf.port, orig.port)
+	refute(t, defaultCnf.Port, fixed.Port)
+	refute(t, defaultCnf.Port, orig.Port)
 }
 
-// Should fix missing *username*
+// Should fix missing *Username*
 func TestFixNilUsername(t *testing.T) {
 	orig := Config{}
 	fixed := orig.ToValid()
 
-	expect(t, defaultCnf.username, fixed.username)
-	refute(t, defaultCnf.username, orig.username)
+	expect(t, defaultCnf.Username, fixed.Username)
+	refute(t, defaultCnf.Username, orig.Username)
 }
 
-// Shouldnt change existing *username*
+// Shouldnt change existing *Username*
 func TestNoChangeValidUsername(t *testing.T) {
-	orig := Config{username: "alice"}
+	orig := Config{Username: "alice"}
 	fixed := orig.ToValid()
 
-	refute(t, defaultCnf.username, fixed.username)
-	refute(t, defaultCnf.username, orig.username)
+	refute(t, defaultCnf.Username, fixed.Username)
+	refute(t, defaultCnf.Username, orig.Username)
 }
 
 // Should fix missing *certFile*
@@ -64,17 +64,17 @@ func TestFixNilCertFile(t *testing.T) {
 	orig := Config{}
 	fixed := orig.ToValid()
 
-	expect(t, defaultCnf.certFile, fixed.certFile)
-	refute(t, defaultCnf.certFile, orig.certFile)
+	expect(t, defaultCnf.CertFile, fixed.CertFile)
+	refute(t, defaultCnf.CertFile, orig.CertFile)
 }
 
 // Shouldnt change existing *certFile*
 func TestNoChangeValidCertFile(t *testing.T) {
-	orig := Config{certFile: "~/.mumgo/mumgo.crt"}
+	orig := Config{CertFile: "~/.mumgo/mumgo.crt"}
 	fixed := orig.ToValid()
 
-	refute(t, defaultCnf.certFile, fixed.certFile)
-	refute(t, defaultCnf.certFile, orig.certFile)
+	refute(t, defaultCnf.CertFile, fixed.CertFile)
+	refute(t, defaultCnf.CertFile, orig.CertFile)
 }
 
 // Should fix missing *keyFile*
@@ -82,17 +82,17 @@ func TestFixNilKeyFile(t *testing.T) {
 	orig := Config{}
 	fixed := orig.ToValid()
 
-	expect(t, defaultCnf.keyFile, fixed.keyFile)
-	refute(t, defaultCnf.keyFile, orig.keyFile)
+	expect(t, defaultCnf.KeyFile, fixed.KeyFile)
+	refute(t, defaultCnf.KeyFile, orig.KeyFile)
 }
 
 // Shouldnt change existing *keyFile*
 func TestNoChangeValidKeyFile(t *testing.T) {
-	orig := Config{keyFile: "~/.mumgo/mumgo.crt"}
+	orig := Config{KeyFile: "~/.mumgo/mumgo.crt"}
 	fixed := orig.ToValid()
 
-	refute(t, defaultCnf.keyFile, fixed.keyFile)
-	refute(t, defaultCnf.keyFile, orig.keyFile)
+	refute(t, defaultCnf.KeyFile, fixed.KeyFile)
+	refute(t, defaultCnf.KeyFile, orig.KeyFile)
 }
 
 // Shouldnt fix missing *password*
@@ -100,15 +100,15 @@ func TestNoFixNilPassword(t *testing.T) {
 	orig := Config{}
 	fixed := orig.ToValid()
 
-	expect(t, zeroCnf.password, fixed.password)
-	expect(t, zeroCnf.password, orig.password)
+	expect(t, zeroCnf.Password, fixed.Password)
+	expect(t, zeroCnf.Password, orig.Password)
 }
 
 // Should succeed in loading valid cert
 func TestGetTLSConfigWithValidCertAndKeyFiles(t *testing.T) {
 	certFile, keyFile := os.Getenv("TEST_CRT"), os.Getenv("TEST_KEY")
 
-	config := Config{keyFile: keyFile, certFile: certFile}
+	config := Config{KeyFile: keyFile, CertFile: certFile}
 	tlsConf, err := config.GetTLSConfig(true)
 
 	expect(t, 1, len(tlsConf.Certificates))
@@ -119,7 +119,7 @@ func TestGetTLSConfigWithValidCertAndKeyFiles(t *testing.T) {
 func TestGetTLSConfigWithMissingCertAndKeyFiles(t *testing.T) {
 	certFile, keyFile := "/tmp/missing.crt", "/tmp/missing.key"
 
-	config := Config{keyFile: keyFile, certFile: certFile}
+	config := Config{KeyFile: keyFile, CertFile: certFile}
 	tlsConf, err := config.GetTLSConfig(true)
 
 	expect(t, 0, len(tlsConf.Certificates))
@@ -139,7 +139,7 @@ func TestGetTLSConfigWithInvalidCertAndKeyFiles(t *testing.T) {
 		os.Remove(keyFile)
 	}()
 
-	config := Config{keyFile: keyFile, certFile: certFile}
+	config := Config{KeyFile: keyFile, CertFile: certFile}
 	tlsConf, err := config.GetTLSConfig(true)
 
 	expect(t, 0, len(tlsConf.Certificates))

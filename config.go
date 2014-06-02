@@ -5,50 +5,50 @@ import (
 )
 
 type Config struct {
-	username string
-	password string
-	host     string
-	port     int
-	certFile string
-	keyFile  string
+	Username string
+	Password string
+	Host     string
+	Port     int
+	CertFile string
+	KeyFile  string
 }
 
 var certDir = pwd() + "/certs"
 var zeroCnf = Config{}
 var defaultCnf = Config{
-	username: "mumgo", host: "localhost", port: 64738,
-	certFile: certDir + "/mumgo.crt",
-	keyFile:  certDir + "/mumgo.key"}
+	Username: "mumgo", Host: "localhost", Port: 64738,
+	CertFile: certDir + "/mumgo.crt",
+	KeyFile:  certDir + "/mumgo.key"}
 
 // Fix any zero values & return a new Config.
 func (c Config) ToValid() Config {
 
-	if c.username == zeroCnf.username {
-		c.username = defaultCnf.username
+	if c.Username == zeroCnf.Username {
+		c.Username = defaultCnf.Username
 	}
 
-	if c.host == zeroCnf.host {
-		c.host = defaultCnf.host
+	if c.Host == zeroCnf.Host {
+		c.Host = defaultCnf.Host
 	}
 
-	if c.port == zeroCnf.port {
-		c.port = defaultCnf.port
+	if c.Port == zeroCnf.Port {
+		c.Port = defaultCnf.Port
 	}
 
-	if c.certFile == zeroCnf.certFile {
-		c.certFile = defaultCnf.certFile
+	if c.CertFile == zeroCnf.CertFile {
+		c.CertFile = defaultCnf.CertFile
 	}
 
-	if c.keyFile == zeroCnf.keyFile {
-		c.keyFile = defaultCnf.keyFile
+	if c.KeyFile == zeroCnf.KeyFile {
+		c.KeyFile = defaultCnf.KeyFile
 	}
 
 	return c
 }
 
-// Get the tls.Config describing *certFile* & *keyFile*
+// Get the tls.Config describing *CertFile* & *KeyFile*
 func (c *Config) GetTLSConfig(verify bool) (tls.Config, error) {
-	cert, err := tls.LoadX509KeyPair(c.certFile, c.keyFile)
+	cert, err := tls.LoadX509KeyPair(c.CertFile, c.KeyFile)
 
 	if err != nil {
 		return tls.Config{}, err

@@ -49,14 +49,14 @@ type Conn struct {
 // Creates a new connected connection
 func NewConn(config Config) (Conn, error) {
 
-  // Gets tls.Config described by config.certFile & config.keyFile
+	// Gets tls.Config described by config.CertFile & config.KeyFile
 	tlsConf, err := config.GetTLSConfig(false)
 	if err != nil {
 		return Conn{}, err
 	}
 
 	// Inits tls connection
-	addr := fmt.Sprint(config.host, ":", config.port)
+	addr := fmt.Sprint(config.Host, ":", config.Port)
 	tlsConn, err := tls.Dial("tcp", addr, &tlsConf)
 	if err != nil {
 		return Conn{}, err
@@ -151,8 +151,8 @@ func (c *Conn) authenticate(config Config) error {
 	opus := true
 
 	_, err := c.Write(&mumble.Authenticate{
-		Username: &config.username,
-		Password: &config.password,
+		Username: &config.Username,
+		Password: &config.Password,
 		Opus:     &opus})
 
 	return err

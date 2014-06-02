@@ -10,10 +10,10 @@ import (
 
 func newConfig() Config {
 	config := Config{
-		host:     "localhost",
-		port:     64738,
-		certFile: os.Getenv("TEST_CRT"),
-		keyFile:  os.Getenv("TEST_KEY")}
+		Host:     "localhost",
+		Port:     64738,
+		CertFile: os.Getenv("TEST_CRT"),
+		KeyFile:  os.Getenv("TEST_KEY")}
 
 	return config.ToValid()
 }
@@ -31,7 +31,7 @@ func TestNewConnWithAllValid(t *testing.T) {
 
 func TestNewConnWithInvalidAddr(t *testing.T) {
 	config := newConfig()
-	config.host = "missinghost"
+	config.Host = "missinghost"
 
 	conn, err := NewConn(config)
 	defer closeConn(&conn)
@@ -41,7 +41,7 @@ func TestNewConnWithInvalidAddr(t *testing.T) {
 
 func TestNewConnWithInvalidCert(t *testing.T) {
 	config := newConfig()
-	config.certFile = "/tmp/missing.crt"
+	config.CertFile = "/tmp/missing.crt"
 
 	conn, err := NewConn(config)
 	defer closeConn(&conn)
@@ -51,7 +51,7 @@ func TestNewConnWithInvalidCert(t *testing.T) {
 
 func TestNewConnWithInvalidKey(t *testing.T) {
 	config := newConfig()
-	config.keyFile = "/tmp/missing.key"
+	config.KeyFile = "/tmp/missing.key"
 
 	conn, err := NewConn(config)
 	defer closeConn(&conn)
