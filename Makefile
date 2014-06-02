@@ -1,7 +1,10 @@
-export GOPATH = $(shell pwd)
-export TMPDIR = $(shell pwd)/tmp/mumgo
-export TEST_CRT = $(GOPATH)/tmp/certs/mumgo.crt
+export ROOT = $(shell pwd)
+export GOPATH = $(ROOT)
+export TMPDIR = $(ROOT)/tmp/mumgo
+export TEST_CRT = $(ROOT)/tmp/certs/mumgo.crt
 export TEST_KEY = $(subst .crt,.key,$(TEST_CRT))
+
+MURMUR_CFG = $(ROOT)/tmp/murmur/murmur/murmur.ini
 
 
 all: fmt test
@@ -24,3 +27,11 @@ $(TEST_CRT):
 
 $(TMPDIR):
 	mkdir -p $@
+
+
+run/deps: 
+	mkdir -p $(shell dirname $(MURMUR_CFG)) && \
+		sed "s|@@ROOT@@|$(ROOT)|g" \
+			murmur/$(shell basename $(MURMUR_CFG)) > $(MURMUR_CFG) && \
+				murmurd -fg -ini $(MURMUR_CFG)
+
