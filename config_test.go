@@ -1,6 +1,7 @@
 package mumgo
 
 import (
+	"fmt"
 	"os"
 	"testing"
 )
@@ -116,4 +117,10 @@ func TestGetTLSConfig_WithInvalidCertAndKeyFile(t *testing.T) {
 
 	expect(t, 0, len(tlsConf.Certificates))
 	refute(t, nil, err)
+}
+
+func TestGetAddr(t *testing.T) {
+	host, port := "aweso.me", 99999
+	config := NewConfig(Config{Host: host, Port: port})
+	expect(t, fmt.Sprint(host, ":", port), config.GetAddr())
 }

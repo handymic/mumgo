@@ -6,7 +6,6 @@ import (
 
 	"bytes"
 	"crypto/tls"
-	"fmt"
 	"reflect"
 )
 
@@ -56,8 +55,7 @@ func NewConn(config Config) (Conn, error) {
 	}
 
 	// Inits tls connection
-	addr := fmt.Sprint(config.Host, ":", config.Port)
-	tlsConn, err := tls.Dial("tcp", addr, &tlsConf)
+	tlsConn, err := tls.Dial("tcp", config.GetAddr(), &tlsConf)
 	if err != nil {
 		return Conn{}, err
 	}

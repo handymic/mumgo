@@ -2,6 +2,7 @@ package mumgo
 
 import (
 	"crypto/tls"
+	"fmt"
 )
 
 type Config struct {
@@ -66,4 +67,9 @@ func (c *Config) GetTLSConfig(verify bool) (tls.Config, error) {
 		InsecureSkipVerify: !verify}
 
 	return config, nil
+}
+
+// Get the address string described by *Host* & *Port*
+func (c *Config) GetAddr() string {
+	return fmt.Sprintf("%s:%d", c.Host, c.Port)
 }
