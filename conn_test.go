@@ -9,13 +9,11 @@ import (
 )
 
 func newConfig() Config {
-	config := Config{
+	return NewConfig(Config{
 		Host:     "localhost",
 		Port:     64738,
 		CertFile: os.Getenv("TEST_CRT"),
-		KeyFile:  os.Getenv("TEST_KEY")}
-
-	return config.ToValid()
+		KeyFile:  os.Getenv("TEST_KEY")})
 }
 
 func closeConn(conn *Conn) {

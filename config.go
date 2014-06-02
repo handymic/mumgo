@@ -20,8 +20,15 @@ var defaultCnf = Config{
 	CertFile: certDir + "/mumgo.crt",
 	KeyFile:  certDir + "/mumgo.key"}
 
-// Fix any zero values & return a new Config.
-func (c Config) ToValid() Config {
+// Creates a new Config with unassigned fields initialized to defaults
+func NewConfig(base ...Config) Config {
+	var c Config
+
+	if len(base) == 0 {
+		c = Config{}
+	} else {
+		c = base[0]
+	}
 
 	if c.Username == zeroCnf.Username {
 		c.Username = defaultCnf.Username
